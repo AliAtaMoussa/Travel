@@ -27,6 +27,7 @@ include "config.php";
 
     <link rel="stylesheet" href="css/responsive/searchResultsStyle.css">
 
+
 </head>
 
 <body>
@@ -85,14 +86,16 @@ include "config.php";
                                     <a class="nav-link" href="contact.html">Contact</a>
                                 </li>
                             </ul>
-                            <div class="dorne-signin-btn">
-                                <a href="#" onclick="document.getElementById('id01').style.display='block'" >Sign in  or Register</a>
+                          <!--  <div  style="position:absolute;right:500px;">
+                                <a style="color: #fff;">Agent: <?php//  print($_GET["userName"]);  ?></a>
+                            </div>-->
+                            <div class="dorne-add-listings-btn" style="position:absolute;right:200px;">
+                                <button onclick="location.href='index.php'" class="btn dorne-btn"><i  class="fa fa-sign-out btn" aria-hidden="true"></i>Sign out</button>
                             </div>
                             <div class="dorne-add-listings-btn">
                               <!-- weather widget start -->
-                              <a target="_blank" href="https://www.booked.net/weather"><img src="https://w.bookcdn.com/weather/picture/23_30502_1_1_3498db_250_2980b9_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=569&anc_id=32147"  alt="booked.net"/></a><!-- weather widget end -->
+                              <a target="_blank" href="https://www.booked.net/weather/calgary-30502">  <img src="https://w.bookcdn.com/weather/picture/23_30502_1_1_3498db_250_2980b9_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=569&anc_id=32147"  alt="booked.net"/></a><!-- weather widget end -->
                               </div>
-
                         </div>
                     </nav>
                 </div>
@@ -100,85 +103,7 @@ include "config.php";
         </div>
     </header>
     <!-- ***** Header Area End ***** -->
-    <!-- ***** Sign in or register begin ***** -->
-    <div id="id01" class="modal">
-        <span onclick="document.getElementById('id01').style.display='none';document.getElementById('myForm').reset();document.getElementById('myForm1').reset();" class="close" title="Close Modal">&times;</span>
-        <ul class="nav nav-tabs" role="tablist" style="position:relative;left:485px;width:770px;">
-          <li class="nav-item">
-               <a class="nav-link active" data-toggle="tab" href="#signIn">Sign In</a>
-             </li>
-             <li class="nav-item">
-               <a class="nav-link" data-toggle="tab" href="#signUp">Sign Up</a>
-             </li>
 
-        </ul>
-        <div class="tab-content" style="position:relative;left:295px;width:70%;">
-          <div id="signIn" class="container tab-pane active">
-              <form class="modal-content" id="myForm" method="get" action="checklogin.php">
-                    <div class="container">
-                        <h1>Sign In</h1>
-                        <p>Please fill in this form to open your account.</p>
-                        <hr>
-                        <label for="userName"><b>User name</b></label>
-                        <input type="text" placeholder="Enter User Name" name="userName" required>
-
-                        <label for="psw"><b>Password</b></label>
-                        <input type="password" placeholder="Enter Password" name="psw" required>
-
-                        <label for="user"><b>User</b></label></br>
-                        <select class="custom-select" name="accountSelect" style="width: 50%;background-color: #EEEAEA;">
-                            <option style="font-size: 18pt;" selected>I am a/an</option>
-                            <option>Customer</option>
-                            <option>Agent</option>
-                            <option>Supplier</option>
-                        </select>
-
-                        </br></br>
-
-                        <button type="submit" class="signinbtn">Sign In</button>
-
-                    </div>
-                </form>
-            </div>
-        <div id="signUp" class="container tab-pane fade">
-        <form class="modal-content" id="myForm1" method="get" action="/insertAgent.php"><!-- tbd-->
-          <div class="container">
-                    <h1>Sign Up</h1>
-                    <p>Please fill in this form to create an account.</p>
-                    <hr>
-
-                    <label for="fname"><b>First name</b></label>
-                    <input type="text" placeholder="Enter first name" name="AgtFirstName" required>
-
-                    <label for="lname"><b>Last name</b></label>
-                    <input type="text" placeholder="Enter Last name" name="AgtLastName" required>
-
-                    <label for="phonenumber"><b>Phone number</b></label>
-                    <input type="tel" pattern="^\d{3}-\d{3}-\d{4}$" placeholder="Enter phone number" name="AgtBusPhone" required>
-
-                    <label for="email"><b>Email</b></label>
-                    <!--<p class="formdesc" id="parapostal">The email adress format should be abc@fgh.xyz</p>-->
-                    <input type="email" placeholder="Enter Email" name="AgtEmail"  required><!--onfocus="showDesc('parapostal');"-->
-
-                    <label for="psw"><b>Password</b></label>
-                    <input type="password" placeholder="Enter Password" name="password" required>
-
-                    <label for="psw-repeat"><b>Repeat Password</b></label>
-                    <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
-
-                    <p>By creating an account you agree to our <a href="TermsAndConditions.pdf" style="color:dodgerblue">Terms & Privacy</a>.</p>
-
-                    <div class="clearfix">
-                        <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-                        <button type="submit" class="signupbtn">Sign Up</button>
-                    </div>
-          </div>
-        </form>
-    </div>
-    </div>
-    </div>
-
-    <!-- ***** Sign in or register End ***** -->
 
     <!-- ***** Breadcumb Area Start ***** -->
     <div class="breadcumb-area bg-img bg-overlay" style="background-image: url(img/bg-img/design2.jpg)">
@@ -188,8 +113,8 @@ include "config.php";
     <!-- ***** Contact Area Start ***** -->
     <div class="dorne-contact-area d-md-flex" id="contact">
     <section class="container">
-      <h2>Our Agents: </h2>
-      <p>Our agents are always ready to help youm and they are all  Experts!</p>
+         <h2>Packages appeared in the search: </h2>
+           <p>Select and book! Have a wonderful trip withe Travel experts!</p>
 
          <div class="trip_table_wdg">
 
@@ -199,28 +124,27 @@ include "config.php";
                        {
                          die("Error: " . mysqli_connect_errno() . " - " . mysqli_connect_error());
                        }
+                       $sql = "SELECT  packages.image, packages.PkgName, packages.PkgStartDate, packages.PkgEndDate, packages.PkgDesc, packages.PkgBasePrice from packages";
 
-                           $sql = "SELECT agents.AgtFirstName,agents.AgtLastName,agents.AgtBusPhone,agents.AgtEmail,agents.AgtPosition,agencies.AgncyCity FROM agents
-                           INNER JOIN agencies ON agents.AgencyId = agencies.AgencyId";
+                       if ($result = mysqli_query($dbh, $sql))
+                       {
+                         while ($row = mysqli_fetch_assoc($result))
+                         {
+                           print("<ul style=\"width: 270px;\">");
+                          print("<img src=\"img/pkg-img/". $row['image'] .".jpg\">");
+                           //print("<li id=". $row['PackageId'] .">Package offer</li> ");
 
-
-                           if ($result = mysqli_query($dbh, $sql))
+                           foreach ($row as $col)
                            {
-                             while ($row = mysqli_fetch_assoc($result))
-                             {
-                               print("<ul style=\"width:250px;\">");
-                               foreach ($row as $col)
-                               {
-                                 print("<li>$col</li>");
-                               }
-                               print("<li><a>Call</a><a>Send Email</a></li>");//class=\"buy_now\" href=\"flightBooked.html\"
-
-                               print("</ul>");
-                             }
-                             mysqli_free_result($result);
-
+                             print("<li>$col</li>");
                            }
+                           print("<li><a class=\"buy_now\" onclick=\"Book($(this).closest('ul').attr('id'))\">Book Now</a></li>");
 
+                           print("</ul>");
+                         }
+                         mysqli_free_result($result);
+
+}
 
                        mysqli_close($dbh);
                      ?>
@@ -230,6 +154,97 @@ include "config.php";
     </div>
   </div>
     <!-- ***** Contact Area End ***** -->
+
+
+    <div id="id02" class="modal">
+      <div class="roww">
+        <div class="col-755">
+          <div id="cont" class="container">
+            <form name="myForm1" action="/addBillingDetails.php">
+              <span onclick="document.getElementById('id02').style.display='none';document.getElementById('myForm').reset();document.getElementById('myForm1').reset();" class="close" title="Close Modal">&times;</span>
+              <div class="roww">
+                <div class="col-500">
+                  <h3>Billing Address</h3>
+                  <label for="fname"><i class="fa fa-user"></i> Full Name</label>
+                  <div class="roww">
+                    <div class="col-500">
+                    <input type="text" id="fname" name="fname" placeholder="First name">
+                    </div>
+                  <div class="col-500">
+                  <input type="text" id="lname" name="lname" placeholder="Last name">
+                  </div>
+                  </div>
+                  <label for="email"><i class="fa fa-envelope"></i> Email</label>
+                  <input type="email" id="email" name="email" placeholder="Enter your email">
+                  <label for="phoneNo"><i class="fa fa-phone"></i> Phone</label>
+                  <input type="text" id="phone" name="phone" placeholder="Enter your phone number">
+                  <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
+                  <input type="text" id="adr" name="address" placeholder="Enter your address">
+                  <label for="city"><i class="fa fa-institution"></i> City</label>
+                  <div class="roww">
+                    <div class="col-500">
+                    <input type="text" id="city" name="city" placeholder="City">
+                    </div>
+                  <div class="col-500">
+                  <input type="text" id="country" name="country" placeholder="Country">
+                  </div>
+                  </div>
+                  <div class="roww">
+                    <div class="col-500">
+                      <label for="state">State/Province</label>
+                      <input type="text" id="state" name="state" placeholder="Province">
+                    </div>
+                    <div class="col-500">
+                      <label for="zip">ZIP/POSTAL</label>
+                      <input type="text" id="zip" name="zip" placeholder="ZIP code">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-500">
+                  <h3>Payment</h3>
+                  <label for="fname">Accepted Cards</label>
+                  <div class="icon-container">
+                    <i class="fa fa-cc-visa" style="color:navy;"></i>
+                    <i class="fa fa-cc-amex" style="color:blue;"></i>
+                    <i class="fa fa-cc-mastercard" style="color:red;"></i>
+                    <i class="fa fa-cc-discover" style="color:orange;"></i>
+                  </div>
+                  <label for="cname">Name on Card</label>
+                  <input type="text" id="cname" name="cardname" placeholder="Enter your name on the card">
+                  <label for="ccnum">Credit card number</label>
+                  <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
+                  <label for="expmonth">Exp Month</label>
+                  <input type="text" id="expmonth" name="expmonth" placeholder="Enter expiry month">
+                  <div class="row">
+                    <div class="col-500">
+                      <label for="expyear">Exp Year</label>
+                      <input type="text" id="expyear" name="expyear" placeholder="Expiry year">
+                    </div>
+                    <div class="col-500">
+                      <label for="cvv">CVV</label>
+                      <input type="text" id="cvv" name="cvv" placeholder="CVV">
+                    </div>
+                  </div>
+                </div>
+
+      </div>
+
+      <input type="submit" value="Confirm Booking" class="btnn">
+    </form>
+  </div>
+</div>
+</div>
+</div>
+
+      <script>
+      function Book(id) {
+        document.getElementById('id02').style.display='block';
+        document.getElementById('myForm1').reset();
+        //window.location.href = "/bookFlightDB.php?id=" + id;
+        return false;
+       }
+       </script>
 
     <!-- ****** Footer Area Start ****** -->
     <footer class="dorne-footer-area">
@@ -264,12 +279,18 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <!-- All Plugins js -->
     <script src="js/others/plugins.js"></script>
 
+    <script src="js/bootstrap/bootpopup.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 	<!--<script src="js/google-map/map-active.js"></script>
      Active JS -->
     <script src="js/active.js"></script>
      <!-- Validate JS -->
     <script src="js/validate.js"></script>
+
+
+
 </body>
 
 </html>

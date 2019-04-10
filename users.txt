@@ -1,0 +1,10 @@
+cust:
+ali
+ali1
+
+suplier:
+dertravel
+dertravel1
+
+agt
+agt1

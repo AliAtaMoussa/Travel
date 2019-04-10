@@ -50,56 +50,51 @@
 
     <!-- ***** Header Area Start ***** -->
     <header class="header_area" id="header">
-        <div class="container-fluid h-100">
-            <div class="row h-100">
-                <div class="col-12 h-100">
-                    <nav class="h-100 navbar navbar-expand-lg">
-                        <a class="navbar-brand" href="index.php"><img src="img/core-img/logo1.png" alt=""></a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#dorneNav" aria-controls="dorneNav" aria-expanded="false" aria-label="Toggle navigation"><span class="fa fa-bars"></span></button>
-                        <!-- Nav -->
-                        <div class="collapse navbar-collapse" id="dorneNav">
-                            <ul class="navbar-nav mr-auto" id="dorneMenu">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Explore <i class="fa fa-angle-down" aria-hidden="true"></i></a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="index.php#cities">Cities you must see</a>
-                                        <a class="dropdown-item" href="index.php#destinations">Featured destinations</a>
-                                        <a class="dropdown-item" href="index.php#restaurants">Featured Restaurants</a>
-                                        <a class="dropdown-item" href="index.php#events">Featured events</a>
-                                    </div>
-                                </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Listings <i class="fa fa-angle-down" aria-hidden="true"></i></a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                                        <a class="dropdown-item" href="index.php">Home</a>
-                                        <a class="dropdown-item" href="explore.html">Explore</a>
-                                        <a class="dropdown-item" href="listing.html">Listing</a>
-                                        <a class="dropdown-item" href="single-listing.html">Single Listing</a>
-                                        <a class="dropdown-item" href="contact.html">Contact</a>
-                                    </div>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="contact.html">Contact</a>
-                                </li>
-                            </ul>
+            <div class="container-fluid h-100">
+                <div class="row h-100">
+                    <div class="col-12 h-100">
+                        <nav class="h-100 navbar navbar-expand-lg">
+                            <a class="navbar-brand" href="index.php"><img src="img/core-img/logo1.png" alt=""></a>
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#dorneNav" aria-controls="dorneNav" aria-expanded="false" aria-label="Toggle navigation"><span class="fa fa-bars"></span></button>
+                            <!-- Nav -->
+                            <div class="collapse navbar-collapse" id="dorneNav">
+                                <ul class="navbar-nav mr-auto" id="dorneMenu">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#aboutus">About us <span class="sr-only">(current)</span></a>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Explore <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" href="#cities">Cities you must see</a>
+                                            <a class="dropdown-item" href="#destinations">Featured destinations</a>
+                                            <a class="dropdown-item" href="#restaurants">Featured Restaurants</a>
+                                            <a class="dropdown-item" href="#events">Featured events</a>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="selectAgent.php">Our Agents</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="contact.html">Contact</a>
+                                    </li>
+                                </ul>
 
-                            <!-- Signin btn -->
-                            <div class="dorne-signin-btn">
-                                <a href="#" onclick="document.getElementById('id01').style.display='block'" >Sign in  or Register</a>
+                                <div class="dorne-add-listings-btn" style="position:absolute;right:200px;">
+                                    <button onclick="location.href='index.php'" class="btn dorne-btn"><i  class="fa fa-sign-out btn" aria-hidden="true"></i>Sign out</button>
+                                </div>
+                                <div class="dorne-add-listings-btn">
+                                  <!-- weather widget start -->
+                                  <a target="_blank" href="https://www.booked.net/weather/calgary-30502">  <img src="https://w.bookcdn.com/weather/picture/23_30502_1_1_3498db_250_2980b9_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=569&anc_id=32147"  alt="booked.net"/></a><!-- weather widget end -->
+                                  </div>
                             </div>
-                            <!-- Add listings btn
-                            <div class="dorne-add-listings-btn">
-                                <a href="#" class="btn dorne-btn">+ Add Listings</a>
-                            </div>-->
-                        </div>
-                    </nav>
+                        </nav>
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
     <!-- ***** Header Area End ***** -->
 
     <!-- ***** Sign in or register begin ***** -->
@@ -153,7 +148,7 @@
 
 						<div class="clearfix">
 							<button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-							<button type="submit" class="signupbtn" onclick="return validate(this.form);">Sign Up</button>
+							<button type="submit" class="signupbtn" >Sign Up</button>
 						</div>
 					</div>
 				</form>
@@ -168,33 +163,36 @@
     <!-- ***** Contact Area Start ***** -->
     <div class="dorne-contact-area d-md-flex" id="contact">
         <!-- Contact Form Area -->
-        <div class="contact-form-area equal-height">
+        <div style="padding:25px;">
             <div class="contact-text">
-                <h2>User is inserted successfully!</h2>
+                <h2>Your flight/package <?php print($_GET['id']) ?> is booked!</h2>
+                <h2 style="font-size:20px;">You will receive an email including the flight details.</h2><br>
+                <h3>Thank you for your trust in Travel Experts!</h3>
+                <p>Travel Experts are always ready for any requests, help and comments.</p><br><br><br>
 
-                <h4>For more information, Contact Travel Experts:</h4>
+                <h3>For more information, Contact Travel Experts:</h3>
                 <div class="contact-info d-lg-flex">
-                    <h6>Calgary Branch:</h6><br>
+                    <p>Calgary Branch:</h6><br>
                     <div class="single-contact-info">
-                        <h6><i class="fa fa-map-signs" aria-hidden="true"></i> 1155 8th Ave SW</h6>
-                        <h6><i class="fa fa-map-signs" aria-hidden="true"></i> Calgary, AB T2P 1N3</h6>
+                        <p><i class="fa fa-map-signs" aria-hidden="true"></i> 1155 8th Ave SW</h6>
+                        <p><i class="fa fa-map-signs" aria-hidden="true"></i> Calgary, AB T2P 1N3</h6>
                     </div>
                     <div class="single-contact-info">
-                        <h6><i class="fa fa-envelope-o" aria-hidden="true"></i> contactca@travelexperts.com</h6>
-                        <h6><i class="fa fa-phone" aria-hidden="true"></i> +1 403 271 9873 </h6>
-                        <h6><i class="fa fa-fax" aria-hidden="true"></i> +1 403 271 9872 </h6>
+                        <p><i class="fa fa-envelope-o" aria-hidden="true"></i> contactca@travelexperts.com</h6>
+                        <p><i class="fa fa-phone" aria-hidden="true"></i> +1 403 271 9873 </h6>
+                        <p><i class="fa fa-fax" aria-hidden="true"></i> +1 403 271 9872 </h6>
                     </div>
                 </div>
                 <div class="contact-info d-lg-flex">
-                    <h6>Okotoks Branch:</h6><br>
+                    <p>Okotoks Branch:</h6><br>
                     <div class="single-contact-info">
-                        <h6><i class="fa fa-map-signs" aria-hidden="true"></i> 110 Main Street</h6>
-                        <h6><i class="fa fa-map-signs" aria-hidden="true"></i> Okotoks, AB T7R 3J5</h6>
+                        <p><i class="fa fa-map-signs" aria-hidden="true"></i> 110 Main Street</h6>
+                        <p><i class="fa fa-map-signs" aria-hidden="true"></i> Okotoks, AB T7R 3J5</h6>
                     </div>
                     <div class="single-contact-info">
-                        <h6><i class="fa fa-envelope-o" aria-hidden="true"></i> contactok@travelexperts.com</h6>
-                        <h6><i class="fa fa-phone" aria-hidden="true"></i> +1 403 563 2381 </h6>
-                        <h6><i class="fa fa-fax" aria-hidden="true"></i> +1 403 563 2382 </h6>
+                        <p><i class="fa fa-envelope-o" aria-hidden="true"></i> contactok@travelexperts.com</h6>
+                        <p><i class="fa fa-phone" aria-hidden="true"></i> +1 403 563 2381 </h6>
+                        <p><i class="fa fa-fax" aria-hidden="true"></i> +1 403 563 2382 </h6>
                     </div>
                 </div>
             </div>
@@ -205,9 +203,6 @@
         <div class="dorne-map-area equal-height">
             <div id="gmap_canvas"></div>
         </div> -->
-		<div class="dorne-map-area equal-height">
-          <img style='height:600px;width:500px;position: absolute;top: 180px;right:100px;' src="img/core-img/pic.jpg">
-		</div>
 
     </div>
     <!-- ***** Contact Area End ***** -->
@@ -253,8 +248,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	<!--<script src="js/google-map/map-active.js"></script>
      Active JS -->
     <script src="js/active.js"></script>
-     <!-- Validate JS -->
-    <script src="js/validate.js"></script>
+
 </body>
 
 </html>

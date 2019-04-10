@@ -1,10 +1,8 @@
-<?php
-  session_start();
-	include "config.php";
-?>
 <!DOCTYPE html>
 <html lang="en">
-
+<?php
+include "config.php";
+?>
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="">
@@ -85,14 +83,16 @@
                                         <a class="nav-link" href="contact.html">Contact</a>
                                     </li>
                                 </ul>
-                                <div class="dorne-signin-btn">
-                                    <a href="#" onclick="document.getElementById('id01').style.display='block'" >Sign in  or Register</a>
+                                <div  style="position:absolute;right:500px;">
+                                    <a style="color: #fff;">Agent: <?php  print($_GET["userName"]);  ?></a>
+                                </div>
+                                <div class="dorne-add-listings-btn" style="position:absolute;right:200px;">
+                                    <button onclick="location.href='index.php'" class="btn dorne-btn"><i  class="fa fa-sign-out btn" aria-hidden="true"></i>Sign out</button>
                                 </div>
                                 <div class="dorne-add-listings-btn">
                                   <!-- weather widget start -->
-                                  <a target="_blank" href="https://www.booked.net/weather"><img src="https://w.bookcdn.com/weather/picture/23_30502_1_1_3498db_250_2980b9_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=569&anc_id=32147"  alt="booked.net"/></a><!-- weather widget end -->
+                                  <a target="_blank" href="https://www.booked.net/weather/calgary-30502"><img src="https://w.bookcdn.com/weather/picture/23_30502_1_1_3498db_250_2980b9_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=569&anc_id=32147"  alt="booked.net"/></a><!-- weather widget end -->
                                   </div>
-
                             </div>
                         </nav>
                     </div>
@@ -101,85 +101,6 @@
         </header>
     <!-- ***** Header Area End ***** -->
 
-    <!-- ***** Sign in or register begin ***** -->
-    <div id="id01" class="modal">
-				<span onclick="document.getElementById('id01').style.display='none';document.getElementById('myForm').reset();document.getElementById('myForm1').reset();" class="close" title="Close Modal">&times;</span>
-        <ul class="nav nav-tabs" role="tablist" style="position:relative;left:450px;width:620px;">
-          <li class="nav-item">
-               <a class="nav-link active" data-toggle="tab" href="#signIn">Sign In</a>
-             </li>
-             <li class="nav-item">
-               <a class="nav-link" data-toggle="tab" href="#signUp">Sign Up</a>
-             </li>
-
-        </ul>
-        <div class="tab-content" style="position:relative;left:295px;width:70%;">
-          <div id="signIn" class="container tab-pane active">
-              <form class="modal-content" id="myForm" method="get" action="checklogin.php">
-                    <div class="container">
-                        <h1>Sign In</h1>
-            						<p>Please fill in this form to open your account.</p>
-            						<hr>
-            						<label for="userName"><b>User name</b></label>
-            						<input type="text" placeholder="Enter User Name" name="userName" required>
-
-            						<label for="psw"><b>Password</b></label>
-            						<input type="password" placeholder="Enter Password" name="psw" required>
-
-                        <label for="user"><b>User</b></label></br>
-                        <select class="custom-select" name="accountSelect" style="width: 50%;background-color: #EEEAEA;">
-                            <option style="font-size: 18pt;" selected>I am a/an</option>
-                            <option>Customer</option>
-                            <option>Agent</option>
-                            <option>Supplier</option>
-                        </select>
-
-                        </br></br>
-
-                        <button type="submit" class="signinbtn">Sign In</button>
-
-                    </div>
-                </form>
-            </div>
-        <div id="signUp" class="container tab-pane fade">
-				<form class="modal-content" id="myForm1" method="get" action="/insertAgent.php"><!-- tbd-->
-          <div class="container">
-        						<h1>Sign Up</h1>
-        						<p>Please fill in this form to create an account.</p>
-        						<hr>
-
-                    <label for="fname"><b>First name</b></label>
-        						<input type="text" placeholder="Enter first name" name="AgtFirstName" required>
-
-                    <label for="lname"><b>Last name</b></label>
-        						<input type="text" placeholder="Enter Last name" name="AgtLastName" required>
-
-                    <label for="phonenumber"><b>Phone number</b></label>
-        						<input type="tel" pattern="^\d{3}-\d{3}-\d{4}$" placeholder="Enter phone number" name="AgtBusPhone" required>
-
-        						<label for="email"><b>Email</b></label>
-                    <!--<p class="formdesc" id="parapostal">The email adress format should be abc@fgh.xyz</p>-->
-        						<input type="email" placeholder="Enter Email" name="AgtEmail"  required><!--onfocus="showDesc('parapostal');"-->
-
-        						<label for="psw"><b>Password</b></label>
-        						<input type="password" placeholder="Enter Password" name="password" required>
-
-        						<label for="psw-repeat"><b>Repeat Password</b></label>
-        						<input type="password" placeholder="Repeat Password" name="psw-repeat" required>
-
-        						<p>By creating an account you agree to our <a href="TermsAndConditions.pdf" style="color:dodgerblue">Terms & Privacy</a>.</p>
-
-        						<div class="clearfix">
-          							<button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel</button>
-          							<button type="submit" class="signupbtn">Sign Up</button>
-						        </div>
-					</div>
-				</form>
-    </div>
-  </div>
-  </div>
-
-    <!-- ***** Sign in or register End ***** -->
 
     <!-- ***** Welcome Area Start ***** -->
     <section class="dorne-welcome-area bg-img bg-overlay" style="background-image: url(img/bg-img/design2.jpg);">
@@ -187,23 +108,25 @@
             <div class="row h-100 align-items-center justify-content-center">
                 <div class="col-12 col-md-10">
                     <div class="hero-content">
-                        <h2><label id="lblGreetings"></label> ... Discover the World ...</h2>
-                        <h4>This is the best guide to explore and more ...</h4>
+                        <h2><label id="lblGreetings"></label></h2>
+                        <h4>This page can be just used by the user: <?php  print($_GET["userName"]);  ?></h4>
                     </div>
                     <!-- Hero Search Form -->
                     <div class="hero-search-form">
                         <!-- Tabs -->
                         <div class="nav nav-tabs" id="heroTab" role="tablist">
-                            <a class="nav-item nav-link active" id="nav-places-tab" data-toggle="tab" href="#nav-places" role="tab" aria-controls="nav-places" aria-selected="true">Packages</a>
-                            <!--<a class="nav-item nav-link" id="nav-events-tab" data-toggle="tab" href="#nav-events" role="tab" aria-controls="nav-events" aria-selected="false">Events</a>-->
+                            <a class="nav-item nav-link active" id="nav-places-tab" data-toggle="tab" href="#nav-places" role="tab" aria-controls="nav-places" aria-selected="true">Places</a>
                         </div>
                         <!-- Tabs Content -->
                         <div class="tab-content" id="nav-tabContent">
                             <div class="tab-pane fade show active" id="nav-places" role="tabpanel" aria-labelledby="nav-places-tab">
                                 <h6>What are you looking for?</h6>
-                                <form action="/searchResults.php" method="get">
+                                <form action="/searchResultsAgent.php" method="get">
+                                    <select hidden name="userName"><option selected><?php  print($_GET["userName"]);  ?></option></select>
                                     <select class="custom-select" name="custom-select1">
                                         <option selected>Your Destinations</option>
+
+
                                         <?php
                                               $dbh = @mysqli_connect($host,$user,$pwd,$db);
                                               if (! $dbh)
@@ -228,7 +151,7 @@
                                               }
 
                                               mysqli_close($dbh);
-                                        ?>
+                                    ?>
                                     </select>
                                     <select class="custom-select" name="custom-select2">
                                     <option selected>All Classes</option>
@@ -263,11 +186,11 @@
 
                                     <select class="custom-select" name="custom-select3">
                                         <option selected>Price Range</option>
-                                        <option value="100.0000-499.0000">$100 - $499</option>
-                                        <option value="500.0000-999.0000">$500 - $999</option>
-                                        <option value="1000.0000-4999.0000">$1000 - $4999</option>
-                                        <option value="5000.0000-9999.0000">$5000 - $9999</option>
-                                        <option value="10000.0000-100000.0000">$10000 - and more</option>
+                                        <option value="100.0000-499.0000">$100.0000 - $499.0000</option>
+                                        <option value="500.0000-999.0000">$500.0000 - $999.0000</option>
+                                        <option value="1000.0000-4999.0000">$1000.0000 - $4999.0000</option>
+                                        <option value="5000.0000-9999.0000">$5000.0000 - $9999.0000</option>
+                                        <option value="10000.0000-100000.0000">$10000.00000 - and more</option>
                                     </select>
                                     <button type="submit" class="btn dorne-btn"><i class="fa fa-search pr-2" aria-hidden="true"></i> Search</button>
                                 </form>
@@ -287,6 +210,7 @@
             </div>
             <div class="social-btns">
                 <a href="https://www.linkedin.com/" target = "_blank"><i class="fa fa-linkedin" aria-haspopup="true"></i></a>
+                <a href="https://www.behance.net/" target = "_blank"><i class="fa fa-behance" aria-hidden="true"></i></a>
                 <a href="https://twitter.com/?lang=en" target = "_blank"><i class="fa fa-twitter" aria-haspopup="true"></i></a>
                 <a href="https://www.facebook.com/" target = "_blank"><i class="fa fa-facebook" aria-haspopup="true"></i></a>
                 <a href="https://slack.com/" target = "_blank"><i class="fa fa-slack" aria-hidden="true"></i></a>
@@ -307,7 +231,7 @@
                                 <div class="single-catagory-area wow fadeInUpBig" data-wow-delay="0.2s">
                                     <div class="catagory-content">
                                         <img src="img/core-img/icon-1.png" alt="">
-                                        <a href="https://www.google.com/maps/search/Hotels/">
+                                        <a href="#">
                                             <h6>Hotels</h6>
                                         </a>
                                     </div>
@@ -318,7 +242,7 @@
                                 <div class="single-catagory-area wow fadeInUpBig" data-wow-delay="0.4s">
                                     <div class="catagory-content">
                                         <img src="img/core-img/icon-2.png" alt="">
-                                        <a href="https://www.google.com/maps/search/Restaurants/">
+                                        <a href="#">
                                             <h6>Restaurants</h6>
                                         </a>
                                     </div>
@@ -329,7 +253,7 @@
                                 <div class="single-catagory-area wow fadeInUpBig" data-wow-delay="0.6s">
                                     <div class="catagory-content">
                                         <img src="img/core-img/icon-3.png" alt="">
-                                        <a href="https://www.google.com/maps/search/Shopping/">
+                                        <a href="#">
                                             <h6>Shopping</h6>
                                         </a>
                                     </div>
@@ -340,7 +264,7 @@
                                 <div class="single-catagory-area wow fadeInUpBig" data-wow-delay="0.8s">
                                     <div class="catagory-content">
                                         <img src="img/core-img/icon-4.png" alt="">
-                                        <a href="https://www.google.com/maps/search/Beauty/">
+                                        <a href="#">
                                             <h6>Beauty &amp; Spa</h6>
                                         </a>
                                     </div>
@@ -351,8 +275,8 @@
                                 <div class="single-catagory-area wow fadeInUpBig" data-wow-delay="1s">
                                     <div class="catagory-content">
                                         <img src="img/core-img/icon-5.png" alt="">
-                                        <a href="https://www.google.com/maps/search/Movie%20Theater">
-                                            <h6>Movie Theater</h6>
+                                        <a href="#">
+                                            <h6>Cinema</h6>
                                         </a>
                                     </div>
                                 </div>
@@ -366,28 +290,14 @@
     <!-- ***** Catagory Area End ***** -->
 
     <!-- ***** About Area Start ***** -->
-    <section id="aboutus" class="dorne-about-area section-padding-0-100">
+    <section class="dorne-about-area section-padding-0-100">
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                  <div class="about-content text-center">
-                  </br></br></br>
-                  <h2>Discover the World with <br><span>Travel Experts</span></h2>
-                  <p><b>Quality and service</b></p>
-                  <p>We, at Travel Experts, are committed to quality and service at every step of your journey. We closely monitor client satisfaction and seek new ways to exceed your expectations. </p>
-                  </br><p><b>A personal touch</b></p>
-                  <p> We make it a practice to greet our clients personally and review your entire trip. You will know your personal travel consultant both by name and by face.</p>
-                  </br><p><b>Friendly and knowledgeable staff</b></p>
-                  <p>Since 2000, we’ve been creating unforgettable travel experiences. Our staff has extensive, firsthand knowledge and are passionate about what they do.</p>
-                  </br><p><b>Save time and effort</b></p>
-                  <p> By choosing Travel Experts, you can save time and hassle by booking all of your itinerary services directly with a specialised local agency.</p>
-                  </br><p><b>Tailor-made holidays</b></p>
-                  <p>Our packages can be tailored or built completely from scratch to suit your needs. Contact us with your interests. </p>
-                  </br><p><b>You’re in good hands</b></p>
-                  <p>Staff is on call 24/7 to handle any unforeseen situations at any time during your journey.  We respond to regular emails and voicemail within 24 hours. </p>
-                  </br><p><b>Legitimacy</b></p>
-                  <p>Travel Experts is insured, fully licensed and approved by local authorities. As members of various travel industry associations, we are held to a high level of standards and practices. Read our reviews online. </p>
-                </div>
+                    <div class="about-content text-center">
+                        <h2>Discover the World with <br><span>Travel Experts</span></h2>
+                        <p>We are ready anytime to serve you with any service to feel comfortable on your Trip !</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -417,7 +327,7 @@
                                 <a href="#">United States</a>
                             </div>
                             <div class="add-more">
-                                <a href="https://en.wikipedia.org/wiki/New_York_City">+</a>
+                                <a href="#">+</a>
                             </div>
                         </div>
                     </div>
@@ -431,7 +341,7 @@
                                 <a href="#">Spain</a>
                             </div>
                             <div class="add-more">
-                                <a href="https://en.wikipedia.org/wiki/Barcelona">+</a>
+                                <a href="#">+</a>
                             </div>
                         </div>
                     </div>
@@ -443,7 +353,7 @@
                                 <a href="#">France</a>
                             </div>
                             <div class="add-more">
-                                <a href="https://en.wikipedia.org/wiki/Paris">+</a>
+                                <a href="#">+</a>
                             </div>
                         </div>
                     </div>
@@ -588,7 +498,7 @@
                             <div class="feature-content d-flex align-items-center justify-content-between">
                                 <div class="feature-title">
                                     <h5>Martha’s bar</h5>
-                                    <p>London</p>
+                                    <p>Manhathan</p>
                                 </div>
                                 <div class="feature-favourite">
                                     <a href="#"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
@@ -623,7 +533,7 @@
                             </div>
                             <div class="feature-content d-flex align-items-center justify-content-between">
                                 <div class="feature-title">
-                                    <h5>Jim’s corner  </h5>
+                                    <h5>Jim’s corner Pub</h5>
                                     <p>Madrid</p>
                                 </div>
                                 <div class="feature-favourite">
@@ -693,14 +603,14 @@
                         <div class="feature-events-thumb">
                             <img src="img/bg-img/event-1.jpg" alt="">
                             <div class="date-map-area d-flex">
-                                <a href="#">26  JUNE</a>
+                                <a href="#">26 Nov</a>
                                 <a href="#"><img src="img/core-img/map.png" alt=""></a>
                             </div>
                         </div>
                         <div class="feature-events-content">
                             <h5>Jazz Concert</h5>
-                            <h6>London</h6>
-
+                            <h6>Manhathan</h6>
+                            <p>Class aptent taciti sociosqu ad litora torquent per conubia nostra...</p>
                         </div>
                         <div class="feature-events-details-btn">
                             <a href="#">+</a>
@@ -712,14 +622,14 @@
                         <div class="feature-events-thumb">
                             <img src="img/bg-img/event-2.jpg" alt="">
                             <div class="date-map-area d-flex">
-                                <a href="#">14  AUG</a>
+                                <a href="#">26 Nov</a>
                                 <a href="#"><img src="img/core-img/map.png" alt=""></a>
                             </div>
                         </div>
                         <div class="feature-events-content">
                             <h5>DeeJay in the house</h5>
-                            <h6>London</h6>
-
+                            <h6>Manhathan</h6>
+                            <p>Class aptent taciti sociosqu ad litora torquent per conubia nostra...</p>
                         </div>
                         <div class="feature-events-details-btn">
                             <a href="#">+</a>
@@ -731,14 +641,14 @@
                         <div class="feature-events-thumb">
                             <img src="img/bg-img/event-3.jpg" alt="">
                             <div class="date-map-area d-flex">
-                                <a href="#">16  JAN</a>
+                                <a href="#">26 Nov</a>
                                 <a href="#"><img src="img/core-img/map.png" alt=""></a>
                             </div>
                         </div>
                         <div class="feature-events-content">
                             <h5>Theatre Night outside</h5>
-                            <h6>London</h6>
-
+                            <h6>Manhathan</h6>
+                            <p>Class aptent taciti sociosqu ad litora torquent per conubia nostra...</p>
                         </div>
                         <div class="feature-events-details-btn">
                             <a href="#">+</a>
@@ -750,14 +660,14 @@
                         <div class="feature-events-thumb">
                             <img src="img/bg-img/event-4.jpg" alt="">
                             <div class="date-map-area d-flex">
-                                <a href="#">26  APR</a>
+                                <a href="#">26 Nov</a>
                                 <a href="#"><img src="img/core-img/map.png" alt=""></a>
                             </div>
                         </div>
                         <div class="feature-events-content">
                             <h5>Wine tasting</h5>
-                            <h6>London</h6>
-
+                            <h6>Manhathan</h6>
+                            <p>Class aptent taciti sociosqu ad litora torquent per conubia nostra...</p>
                         </div>
                         <div class="feature-events-details-btn">
                             <a href="#">+</a>
@@ -769,14 +679,14 @@
                         <div class="feature-events-thumb">
                             <img src="img/bg-img/event-5.jpg" alt="">
                             <div class="date-map-area d-flex">
-                                <a href="#">12  SEP</a>
+                                <a href="#">26 Nov</a>
                                 <a href="#"><img src="img/core-img/map.png" alt=""></a>
                             </div>
                         </div>
                         <div class="feature-events-content">
                             <h5>New Moon Party</h5>
-                            <h6>London</h6>
-
+                            <h6>Manhathan</h6>
+                            <p>Class aptent taciti sociosqu ad litora torquent per conubia nostra...</p>
                         </div>
                         <div class="feature-events-details-btn">
                             <a href="#">+</a>
@@ -788,14 +698,14 @@
                         <div class="feature-events-thumb">
                             <img src="img/bg-img/event-6.jpg" alt="">
                             <div class="date-map-area d-flex">
-                                <a href="#">22  MAR</a>
+                                <a href="#">26 Nov</a>
                                 <a href="#"><img src="img/core-img/map.png" alt=""></a>
                             </div>
                         </div>
                         <div class="feature-events-content">
-                            <h5>Happy hour at  </h5>
-                            <h6>London</h6>
-
+                            <h5>Happy hour at pub</h5>
+                            <h6>Manhathan</h6>
+                            <p>Class aptent taciti sociosqu ad litora torquent per conubia nostra...</p>
                         </div>
                         <div class="feature-events-details-btn">
                             <a href="#">+</a>
@@ -819,11 +729,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
                         </p>
                     </div>
-                    <div class="footer-social-btns">
-                        <a href="https://www.linkedin.com/"><i class="fa fa-linkedin" aria-haspopup="true"></i></a>
-                        <a href="https://twitter.com/?lang=en"><i class="fa fa-twitter" aria-haspopup="true"></i></a>
-                        <a href="https://www.facebook.com/"><i class="fa fa-facebook" aria-haspopup="true"></i></a>
-                        <a href="https://slack.com/"><i class="fa fa-slack" aria-haspopup="true"></i></a>
+                    <div class="social-btns">
+                        <a href="https://www.linkedin.com/" target = "_blank"><i class="fa fa-linkedin" aria-haspopup="true"></i></a>
+                        <a href="https://twitter.com/?lang=en" target = "_blank"><i class="fa fa-twitter" aria-haspopup="true"></i></a>
+                        <a href="https://www.facebook.com/" target = "_blank"><i class="fa fa-facebook" aria-haspopup="true"></i></a>
+                        <a href="https://slack.com/" target = "_blank"><i class="fa fa-slack" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
@@ -841,6 +751,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="js/others/plugins.js"></script>
     <!-- Active JS -->
     <script src="js/active.js"></script>
+     <!-- Validate JS -->
+    <script src="js/validate.js"></script>
 
     <script>
         var myDate = new Date();
@@ -857,7 +769,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
         document.getElementById('lblGreetings').innerHTML = greet;
 
-        /*var validate = function(myform){
+        var validate = function(myform){
 				var myemail = myform.email;
 				var regx = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@(([a-z0-9]+[-])+[a-z0-9]+\.?)+[a-z]{2,}$/i;
 				if (!regx.test(myemail.value))
@@ -865,7 +777,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 					//alert("invalid email format");
 					return false;
 				}
-}*/
+}
 
 function showDesc(paraId)
 			{

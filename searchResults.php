@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<?php
+include "config.php";
+?>
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="">
@@ -24,6 +26,7 @@
     <link rel="stylesheet" href="css/responsive/subscribeStyle.css">
 
     <link rel="stylesheet" href="css/responsive/searchResultsStyle.css">
+
 
 </head>
 
@@ -64,41 +67,31 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#aboutus">About us <span class="sr-only">(current)</span></a>
+                                </li>
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Explore <i class="fa fa-angle-down" aria-hidden="true"></i></a>
                                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a class="dropdown-item" href="index.php#cities">Cities you must see</a>
-                                        <a class="dropdown-item" href="index.php#destinations">Featured destinations</a>
-                                        <a class="dropdown-item" href="index.php#restaurants">Featured Restaurants</a>
-                                        <a class="dropdown-item" href="index.php#events">Featured events</a>
+                                        <a class="dropdown-item" href="#cities">Cities you must see</a>
+                                        <a class="dropdown-item" href="#destinations">Featured destinations</a>
+                                        <a class="dropdown-item" href="#restaurants">Featured Restaurants</a>
+                                        <a class="dropdown-item" href="#events">Featured events</a>
                                     </div>
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Listings <i class="fa fa-angle-down" aria-hidden="true"></i></a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                                        <a class="dropdown-item" href="index.php">Home</a>
-                                        <a class="dropdown-item" href="explore.html">Explore</a>
-                                        <a class="dropdown-item" href="listing.html">Listing</a>
-                                        <a class="dropdown-item" href="single-listing.html">Single Listing</a>
-                                        <a class="dropdown-item" href="contact.html">Contact</a>
-                                    </div>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="selectAgent.php">Our Agents</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="contact.html">Contact</a>
                                 </li>
                             </ul>
-                            <!-- Search btn -->
-                            <div class="dorne-search-btn">
-                                <a id="search-btn" href="#"><i class="fa fa-search" aria-hidden="true"></i> Search</a>
-                            </div>
-                            <!-- Signin btn -->
-                            <div class="dorne-signin-btn">
-                                <a href="#" onclick="document.getElementById('id01').style.display='block'" >Sign in  or Register</a>
-                            </div>
-                            <!-- Add listings btn
+                  
                             <div class="dorne-add-listings-btn">
-                                <a href="#" class="btn dorne-btn">+ Add Listings</a>
-                            </div>-->
+                              <!-- weather widget start -->
+                              <a target="_blank" href="https://www.booked.net/weather"><img src="https://w.bookcdn.com/weather/picture/23_30502_1_1_3498db_250_2980b9_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=569&anc_id=32147"  alt="booked.net"/></a><!-- weather widget end -->
+                              </div>
+
                         </div>
                     </nav>
                 </div>
@@ -109,125 +102,216 @@
 
 
     <!-- ***** Breadcumb Area Start ***** -->
-    <div class="breadcumb-area bg-img bg-overlay" style="background-image: url(img/bg-img/hero-1.jpg)">
+    <div class="breadcumb-area bg-img bg-overlay" style="background-image: url(img/bg-img/design2.jpg)">
     </div>
     <!-- ***** Breadcumb Area End ***** -->
 
     <!-- ***** Contact Area Start ***** -->
     <div class="dorne-contact-area d-md-flex" id="contact">
     <section class="container">
-         <h2>Flights appeared in the search: </h2>
+         <h2>Packages appeared in the search: </h2>
            <p>Select and book! Have a wonderful trip withe Travel experts!</p>
 
          <div class="trip_table_wdg">
 
                <?php
-                       $dbh = @mysqli_connect("localhost","AliMoussa","password","travelexperts");
+                       $dbh = @mysqli_connect($host,$user,$pwd,$db);
                        if (! $dbh)
                        {
                          die("Error: " . mysqli_connect_errno() . " - " . mysqli_connect_error());
                        }
 
-                       $select1 = $_GET["custom-select1"];
-                       $select2 = $_GET["custom-select2"];
-                       $select3 = $_GET["custom-select3"];
+                       $select1 = $_GET["custom-select1"];//Destination
+                       $select2 = $_GET["custom-select2"];//Classes
+                       $select3 = $_GET["custom-select3"];//Price
                        $str_arr = explode ("-", $select3);
 
-                       if($select1 != "Your Destinations" & $select2 != "All Classes" & $select3 != "Price Range")
-                       {
-                           $sql = "SELECT  bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
-                           bookingdetails.TripEnd, bookingdetails.BasePrice,bookingdetails.AgencyCommission, classes.ClassName
-                           FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
-                           WHERE (bookingdetails.Destination = '".$select1."')
-                           & (BasePrice > $str_arr[0]) & (BasePrice <$str_arr[1]) & (classes.ClassName='".$select2."')";
+                       if($select1 == "Your Destinations" & $select2 == "All Classes" & $select3 == "Price Range")
+                                              {
+                                                  $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
+                                                  bookingdetails.TripEnd, bookingdetails.BasePrice, classes.ClassName
+                                                  FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId";
+                                                  if ($result = mysqli_query($dbh, $sql))
+                                                  {
+                                                    while ($row = mysqli_fetch_assoc($result))
+                                                    {
+                                                      print("<ul>");
+
+                                                      print("<li id=". $row['BookingDetailId'] ."></li> ");
+
+                                                      foreach ($row as $col)
+                                                      {
+                                                        print("<li>$col</li>");
+                                                      }
+                                                      print("<li><a class=\"buy_now\" onclick=\"Book($(this).closest('ul').attr('id'))\">Book Now</a></li>");
+
+                                                      print("</ul>");
+                                                    }
+                                                    mysqli_free_result($result);
+
+                                                  }
+
+                       }elseif($select1 == "Your Destinations" & $select2 == "All Classes" & $select3 != "Price Range")
+                                               {
+                                                   $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
+                                                   bookingdetails.TripEnd, bookingdetails.BasePrice, classes.ClassName
+                                                   FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
+                                                   WHERE (BasePrice > $str_arr[0] and BasePrice < $str_arr[1])";
+
+                                                   if ($result = mysqli_query($dbh, $sql))
+                                                   {
+                                                     while ($row = mysqli_fetch_assoc($result))
+                                                     {
+                                                       print("<ul>");
+                                                       print("<li id=". $row['BookingDetailId'] ."></li> ");
+                                                       foreach ($row as $col)
+                                                       {
+                                                         print("<li>$col</li>");
+                                                       }
+                                                       print("<li><a class=\"buy_now\" onclick=\"Book($(this).closest('ul').attr('id'))\">Book Now</a></li>");
+                                                       print("</ul>");
+                                                     }
+                                                     mysqli_free_result($result);
+
+                                                   }
+                       }elseif($select1 == "Your Destinations" & $select2 != "All Classes" & $select3 == "Price Range")
+                                                {
+                                                    $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
+                                                    bookingdetails.TripEnd, bookingdetails.BasePrice, classes.ClassName
+                                                    FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
+                                                    WHERE classes.ClassName='".$select2."'";
+                                                    if ($result = mysqli_query($dbh, $sql))
+                                                    {
+                                                      while ($row = mysqli_fetch_assoc($result))
+                                                      {
+                                                        print("<ul>");
+                                                        print("<li id=". $row['BookingDetailId'] ."></li> ");
+                                                        foreach ($row as $col)
+                                                        {
+                                                          print("<li>$col</li>");
+                                                        }
+                                                        print("<li><a class=\"buy_now\" onclick=\"Book($(this).closest('ul').attr('id'))\">Book Now</a></li>");
+                                                        print("</ul>");
+                                                      }
+                                                      mysqli_free_result($result);
+
+                                                    }
+
+                       }elseif($select1 != "Your Destinations" & $select2 == "All Classes" & $select3 == "Price Range")
+                                                {
+                                                    $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
+                                                    bookingdetails.TripEnd, bookingdetails.BasePrice, classes.ClassName
+                                                    FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
+                                                    WHERE bookingdetails.Destination = '".$select1."'";
+                                                    if ($result = mysqli_query($dbh, $sql))
+                                                    {
+                                                      while ($row = mysqli_fetch_assoc($result))
+                                                      {
+                                                        print("<ul>");
+                                                        print("<li id=". $row['BookingDetailId'] ."></li> ");
+                                                        foreach ($row as $col)
+                                                        {
+                                                          print("<li>$col</li>");
+                                                        }
+                                                        print("<li><a class=\"buy_now\" onclick=\"Book($(this).closest('ul').attr('id'))\">Book Now</a></li>");
+                                                        print("</ul>");
+                                                      }
+                                                      mysqli_free_result($result);
+
+                                                    }
+
+                       }elseif($select1 == "Your Destinations" & $select2 != "All Classes" & $select3 != "Price Range")
+                                               {
+                                                   $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
+                                                   bookingdetails.TripEnd, bookingdetails.BasePrice, classes.ClassName
+                                                   FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
+                                                   WHERE (BasePrice > $str_arr[0]) and (BasePrice <$str_arr[1]) and (classes.ClassName='".$select2."')";
+                                                   if ($result = mysqli_query($dbh, $sql))
+                                                   {
+                                                     while ($row = mysqli_fetch_assoc($result))
+                                                     {
+                                                       print("<ul>");
+                                                       print("<li id=". $row['BookingDetailId'] ."></li> ");
+                                                       foreach ($row as $col)
+                                                       {
+                                                         print("<li>$col</li>");
+                                                       }
+                                                       print("<li><a class=\"buy_now\" onclick=\"Book($(this).closest('ul').attr('id'))\">Book Now</a></li>");
+                                                       print("</ul>");
+                                                     }
+                                                     mysqli_free_result($result);
+
+                                                   }
 
 
-                           if ($result = mysqli_query($dbh, $sql))
-                           {
-                             while ($row = mysqli_fetch_assoc($result))
-                             {
-                               print("<ul>");
-                               foreach ($row as $col)
-                               {
-                                 print("<li>$col</li>");
-                               }
-                               print("<li><a href=\"flightBooked.html\" class=\"buy_now\">Book Now</a></li>");
-                               print("</ul>");
-                             }
-                             mysqli_free_result($result);
+                       }elseif($select1 != "Your Destinations" & $select2 != "All Classes" & $select3 == "Price Range")
+                                                {
+                                                    $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
+                                                    bookingdetails.TripEnd, bookingdetails.BasePrice, classes.ClassName
+                                                    FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
+                                                    WHERE (bookingdetails.Destination = '".$select1."') and (classes.ClassName='".$select2."')";
+                                                    if ($result = mysqli_query($dbh, $sql))
+                                                    {
+                                                      while ($row = mysqli_fetch_assoc($result))
+                                                      {
+                                                        print("<ul>");
+                                                        print("<li id=". $row['BookingDetailId'] ."></li> ");
+                                                        foreach ($row as $col)
+                                                        {
+                                                          print("<li>$col</li>");
+                                                        }
+                                                        print("<li><a class=\"buy_now\" onclick=\"Book($(this).closest('ul').attr('id'))\">Book Now</a></li>");
+                                                        print("</ul>");
+                                                      }
+                                                      mysqli_free_result($result);
 
-                           }
+                                                    }
 
-                        }elseif($select1 != "Your Destinations" & $select2 != "All Classes" )
-                        {
-                            $sql = "SELECT  bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
-                            bookingdetails.TripEnd, bookingdetails.BasePrice,bookingdetails.AgencyCommission, classes.ClassName
-                            FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
-                            WHERE (bookingdetails.Destination = '".$select1."')
-                            & (classes.ClassName='".$select2."')";
+                       }elseif($select1 != "Your Destinations" & $select2 == "All Classes" & $select3 != "Price Range")
+                                                {
+                                                    $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
+                                                    bookingdetails.TripEnd, bookingdetails.BasePrice, classes.ClassName
+                                                    FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
+                                                    WHERE (bookingdetails.Destination = '".$select1."') and (BasePrice > $str_arr[0]) and (BasePrice <$str_arr[1])";
+                                                    if ($result = mysqli_query($dbh, $sql))
+                                                    {
+                                                      while ($row = mysqli_fetch_assoc($result))
+                                                      {
+                                                        print("<ul>");
+                                                        print("<li id=". $row['BookingDetailId'] ."></li> ");
+                                                        foreach ($row as $col)
+                                                        {
+                                                          print("<li>$col</li>");
+                                                        }
+                                                        print("<li><a class=\"buy_now\" onclick=\"Book($(this).closest('ul').attr('id'))\">Book Now</a></li>");
+                                                        print("</ul>");
+                                                      }
+                                                      mysqli_free_result($result);
 
+                                                    }
 
-                            if ($result = mysqli_query($dbh, $sql))
-                            {
-                              while ($row = mysqli_fetch_assoc($result))
-                              {
-                                print("<ul>");
-                                foreach ($row as $col)
-                                {
-                                  print("<li>$col</li>");
-                                }
-                                print("<li><a href=\"flightBooked.html\" class=\"buy_now\">Book Now</a></li>");
-                                print("</ul>");
-                              }
-                              mysqli_free_result($result);
-                            }
+                       }elseif($select1 != "Your Destinations" & $select2 != "All Classes" & $select3 != "Price Range")
+                                               {
+                                                   $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
+                                                   bookingdetails.TripEnd, bookingdetails.BasePrice, classes.ClassName
+                                                   FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
+                                                   WHERE (bookingdetails.Destination = '".$select1."') and (classes.ClassName='".$select2."') and (BasePrice > $str_arr[0]) and (BasePrice <$str_arr[1])";
+                                                   if ($result = mysqli_query($dbh, $sql))
+                                                   {
+                                                     while ($row = mysqli_fetch_assoc($result))
+                                                     {
+                                                       print("<ul>");
+                                                       print("<li id=". $row['BookingDetailId'] ."></li> ");
+                                                       foreach ($row as $col)
+                                                       {
+                                                         print("<li>$col</li>");
+                                                       }
+                                                       print("<li><a class=\"buy_now\" onclick=\"Book($(this).closest('ul').attr('id'))\">Book Now</a></li>");
+                                                       print("</ul>");
+                                                     }
+                                                     mysqli_free_result($result);
 
-                         }elseif($select1 != "Your Destinations" & $select3 != "Price Range")
-                         {
-                             $sql = "SELECT  bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
-                             bookingdetails.TripEnd, bookingdetails.BasePrice,bookingdetails.AgencyCommission, classes.ClassName
-                             FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
-                             WHERE (bookingdetails.Destination = '".$select1."')
-                             & (BasePrice > $str_arr[0]) & (BasePrice <$str_arr[1]))";
-
-                             if ($result = mysqli_query($dbh, $sql))
-                             {
-
-                               while ($row = mysqli_fetch_assoc($result))
-                               {
-                                 print("<ul>");
-                                 foreach ($row as $col)
-                                 {
-                                   print("<li>$col</li>");
-                                 }
-                                 print("<li><a href=\"flightBooked.html\" class=\"buy_now\">Book Now</a></li>");
-                                 print("</ul>");
-                               }
-                               mysqli_free_result($result);
-                             }
-
-                          }else
-                          {
-                              $sql = "SELECT  bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
-                              bookingdetails.TripEnd, bookingdetails.BasePrice,bookingdetails.AgencyCommission, classes.ClassName
-                              FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId";
-
-                              if ($result = mysqli_query($dbh, $sql))
-                              {
-
-                                while ($row = mysqli_fetch_assoc($result))
-                                {
-                                  print("<ul>");
-                                  foreach ($row as $col)
-                                  {
-                                    print("<li>$col</li>");
-                                  }
-                                  print("<li><a href=\"flightBooked.html\" class=\"buy_now\">Book Now</a></li>");
-                                  print("</ul>");
-                                }
-                                mysqli_free_result($result);
-                              }
-
+                                                   }
                            }
 
                        mysqli_close($dbh);
@@ -238,6 +322,97 @@
     </div>
   </div>
     <!-- ***** Contact Area End ***** -->
+
+
+    <div id="id02" class="modal">
+      <div class="roww">
+        <div class="col-755">
+          <div id="cont" class="container">
+            <form name="myForm1" action="/addBillingDetails.php">
+              <span onclick="document.getElementById('id02').style.display='none';document.getElementById('myForm').reset();document.getElementById('myForm1').reset();" class="close" title="Close Modal">&times;</span>
+              <div class="roww">
+                <div class="col-500">
+                  <h3>Billing Address</h3>
+                  <label for="fname"><i class="fa fa-user"></i> Full Name</label>
+                  <div class="roww">
+                    <div class="col-500">
+                    <input type="text" id="fname" name="fname" placeholder="First name">
+                    </div>
+                  <div class="col-500">
+                  <input type="text" id="lname" name="lname" placeholder="Last name">
+                  </div>
+                  </div>
+                  <label for="email"><i class="fa fa-envelope"></i> Email</label>
+                  <input type="email" id="email" name="email" placeholder="Enter your email">
+                  <label for="phoneNo"><i class="fa fa-phone"></i> Phone</label>
+                  <input type="text" id="phone" name="phone" placeholder="Enter your phone number">
+                  <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
+                  <input type="text" id="adr" name="address" placeholder="Enter your address">
+                  <label for="city"><i class="fa fa-institution"></i> City</label>
+                  <div class="roww">
+                    <div class="col-500">
+                    <input type="text" id="city" name="city" placeholder="City">
+                    </div>
+                  <div class="col-500">
+                  <input type="text" id="country" name="country" placeholder="Country">
+                  </div>
+                  </div>
+                  <div class="roww">
+                    <div class="col-500">
+                      <label for="state">State/Province</label>
+                      <input type="text" id="state" name="state" placeholder="Province">
+                    </div>
+                    <div class="col-500">
+                      <label for="zip">ZIP/POSTAL</label>
+                      <input type="text" id="zip" name="zip" placeholder="ZIP code">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-500">
+                  <h3>Payment</h3>
+                  <label for="fname">Accepted Cards</label>
+                  <div class="icon-container">
+                    <i class="fa fa-cc-visa" style="color:navy;"></i>
+                    <i class="fa fa-cc-amex" style="color:blue;"></i>
+                    <i class="fa fa-cc-mastercard" style="color:red;"></i>
+                    <i class="fa fa-cc-discover" style="color:orange;"></i>
+                  </div>
+                  <label for="cname">Name on Card</label>
+                  <input type="text" id="cname" name="cardname" placeholder="Enter your name on the card">
+                  <label for="ccnum">Credit card number</label>
+                  <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
+                  <label for="expmonth">Exp Month</label>
+                  <input type="text" id="expmonth" name="expmonth" placeholder="Enter expiry month">
+                  <div class="row">
+                    <div class="col-500">
+                      <label for="expyear">Exp Year</label>
+                      <input type="text" id="expyear" name="expyear" placeholder="Expiry year">
+                    </div>
+                    <div class="col-500">
+                      <label for="cvv">CVV</label>
+                      <input type="text" id="cvv" name="cvv" placeholder="CVV">
+                    </div>
+                  </div>
+                </div>
+
+      </div>
+
+      <input type="submit" value="Confirm Booking" class="btnn">
+    </form>
+  </div>
+</div>
+</div>
+</div>
+
+      <script>
+      function Book(id) {
+        document.getElementById('id02').style.display='block';
+        document.getElementById('myForm1').reset();
+        //window.location.href = "/bookFlightDB.php?id=" + id;
+        return false;
+       }
+       </script>
 
     <!-- ****** Footer Area Start ****** -->
     <footer class="dorne-footer-area">
@@ -272,12 +447,18 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <!-- All Plugins js -->
     <script src="js/others/plugins.js"></script>
 
+    <script src="js/bootstrap/bootpopup.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 	<!--<script src="js/google-map/map-active.js"></script>
      Active JS -->
     <script src="js/active.js"></script>
      <!-- Validate JS -->
     <script src="js/validate.js"></script>
+
+
+
 </body>
 
 </html>

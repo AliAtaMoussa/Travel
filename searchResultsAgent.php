@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<?php
+include "config.php";
+?>
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="">
@@ -24,6 +26,13 @@
     <link rel="stylesheet" href="css/responsive/subscribeStyle.css">
 
     <link rel="stylesheet" href="css/responsive/searchResultsStyle.css">
+
+    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.css">
+
+    <script src="//code.jquery.com/jquery.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.10.1/bootstrap-table.min.js"></script>
 
 </head>
 
@@ -64,24 +73,35 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
                                     </li>
-
-
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#aboutus">About us <span class="sr-only">(current)</span></a>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Explore <i class="fa fa-angle-down" aria-hidden="true"></i></a>
+                                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" href="#cities">Cities you must see</a>
+                                            <a class="dropdown-item" href="#destinations">Featured destinations</a>
+                                            <a class="dropdown-item" href="#restaurants">Featured Restaurants</a>
+                                            <a class="dropdown-item" href="#events">Featured events</a>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="selectAgent.php">Our Agents</a>
+                                    </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="contact.html">Contact</a>
                                     </li>
                                 </ul>
-                                <!-- Search btn
-                                <div class="dorne-search-btn">
-                                    <a id="search-btn" href="#"><i class="fa fa-search" aria-hidden="true"></i> Search</a>
-                                </div> -->
-                                <!-- Signin btn -->
                                 <div class="dorne-signin-btn">
-                                    <a style="color: #fff;">Agent: <?php  print($_GET["agentEmail"]);  ?></a>
+                                      <a style="color: #fff;">Agent: <?php  print($_GET["userName"]);  ?></a>
+                                  </div>
+                                <div class="dorne-add-listings-btn" style="position:absolute;right:200px;">
+                                    <button onclick="location.href='index.php'" class="btn dorne-btn"><i  class="fa fa-sign-out btn" aria-hidden="true"></i>Sign out</button>
                                 </div>
-                                <!-- Add listings btn-->
                                 <div class="dorne-add-listings-btn">
-                                    <a href="index.php" class="btn dorne-btn">Sign out</a>
-                                </div>
+                                  <!-- weather widget start -->
+                                  <a target="_blank" href="https://www.booked.net/weather/calgary-30502">  <img src="https://w.bookcdn.com/weather/picture/23_30502_1_1_3498db_250_2980b9_ffffff_ffffff_1_2071c9_ffffff_0_6.png?scode=124&domid=569&anc_id=32147"  alt="booked.net"/></a><!-- weather widget end -->
+                                  </div>
                             </div>
                         </nav>
                     </div>
@@ -92,7 +112,7 @@
 
 
     <!-- ***** Breadcumb Area Start ***** -->
-    <div class="breadcumb-area bg-img bg-overlay" style="background-image: url(img/bg-img/hero-1.jpg)">
+    <div class="breadcumb-area bg-img bg-overlay" style="background-image: url(img/bg-img/design2.jpg)">
     </div>
     <!-- ***** Breadcumb Area End ***** -->
 
@@ -103,9 +123,8 @@
            <p>Select and book! Have a wonderful trip withe Travel experts!</p>
 
          <div class="trip_table_wdg">
-
                <?php
-                       $dbh = @mysqli_connect("localhost","AliMoussa","password","travelexperts");
+                       $dbh = @mysqli_connect($host,$user,$pwd,$db);
                        if (! $dbh)
                        {
                          die("Error: " . mysqli_connect_errno() . " - " . mysqli_connect_error());
@@ -116,111 +135,441 @@
                        $select3 = $_GET["custom-select3"];
                        $str_arr = explode ("-", $select3);
 
-                       if($select1 != "Your Destinations" & $select2 != "All Classes" & $select3 != "Price Range")
-                       {
-                           $sql = "SELECT  bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
-                           bookingdetails.TripEnd, bookingdetails.BasePrice,bookingdetails.AgencyCommission, classes.ClassName
-                           FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
-                           WHERE (bookingdetails.Destination = '".$select1."')
-                           & (BasePrice > $str_arr[0]) & (BasePrice <$str_arr[1]) & (classes.ClassName='".$select2."')";
+                       if($select1 == "Your Destinations" & $select2 == "All Classes" & $select3 == "Price Range")
+                                              {
+                                                  $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination, bookingdetails.BasePrice, bookingdetails.Description, bookingdetails.TripStart,
+                                                  bookingdetails.TripEnd,  classes.ClassName, bookingdetails.AgencyCommission
+                                                  FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId";
+                                                  if ($result = mysqli_query($dbh, $sql))
+                                                  {
+                                                    print("<table id=\"tableId\" name=\"tableName\" data-toggle=\"table\" data-classes=\"table table-hover table-condensed\" data-striped=\"true\" data-sort-name=\"Destination\" data-sort-order=\"desc\">");
+                                                    print("<thead>");
+                                                      print("<tr>");
+                                                          print("<th class=\"col-xs-1\" data-field=\"PackageNumber\" data-sortable=\"true\">Flight number</th>");
+                                                          print("<th class=\"col-xs-1\" data-field=\"Destination\" data-sortable=\"true\">Destination</th>");
+                                                          print("<th class=\"col-xs-1\" data-field=\"BasePrice\" data-sortable=\"true\">Price</th>");
+                                                          print("<th class=\"col-xs-1\" data-field=\"Description\" data-sortable=\"true\">Description</th>");
+                                                          print("<th class=\"col-xs-1\" data-field=\"TripStart\" data-sortable=\"true\">Trip Start</th>");
+                                                          print("<th class=\"col-xs-1\" data-field=\"TripEnd\" data-sortable=\"true\">Trip End</th>");
+                                                          print("<th class=\"col-xs-1\" data-field=\"ClassName\" data-sortable=\"true\">Class</th>");
+                                                          print("<th class=\"col-xs-1\" data-field=\"AgencyCommission\" data-sortable=\"true\">Agency Commission</th>");
+                                                          print("<th class=\"col-xs-1\" data-sortable=\"true\">Book</th>");
+                                                      print("</tr>");
+                                                    print("</thead>");
+                                                    print("<form  method='post' action=\"/bookFlightDB.php\"><tbody>");
+
+                                                    while ($row = mysqli_fetch_assoc($result))
+                                                    {
+                                                         print("<tr id=". $row['BookingDetailId'] ." class=\"tr-class-2\"> ");
+                                                         foreach($row as $col){
+
+                                                           print("<td>$col</td>");
+                                                         }
+
+                                                         //print("<td><button type=\"button\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td>"); onclick=\"Book($(this).closest('tr').attr('id'))\"
+                                                         print("<td><button id=\"$(this).closest('tr').attr('id')\" type=\"submit\"  onclick=\"Book($(this).closest('tr').attr('id'))\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td></tr>");
+                                                    }
+
+                                                    print("</tbody></form>");
+                                                    print("</table>");
+
+                                                  }
+                                                  mysqli_free_result($result);
+
+                       }elseif($select1 == "Your Destinations" & $select2 == "All Classes" & $select3 != "Price Range")
+                                               {
+                                                   $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination, bookingdetails.BasePrice, bookingdetails.Description, bookingdetails.TripStart,
+                                                   bookingdetails.TripEnd,  classes.ClassName, bookingdetails.AgencyCommission
+                                                   FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
+                                                   WHERE (BasePrice > $str_arr[0] and BasePrice < $str_arr[1])";
+
+                                                   if ($result = mysqli_query($dbh, $sql))
+                                                   {
+                                                     print("<table id=\"tableId\" name=\"tableName\" data-toggle=\"table\" data-classes=\"table table-hover table-condensed\" data-striped=\"true\" data-sort-name=\"Destination\" data-sort-order=\"desc\">");
+                                                     print("<thead>");
+                                                       print("<tr>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"PackageNumber\" data-sortable=\"true\">Flight number</th>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"Destination\" data-sortable=\"true\">Destination</th>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"BasePrice\" data-sortable=\"true\">Price</th>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"Description\" data-sortable=\"true\">Description</th>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"TripStart\" >Trip Start</th>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"TripEnd\" data-sortable=\"true\">Trip End</th>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"ClassName\" data-sortable=\"true\">Class</th>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"AgencyCommission\" data-sortable=\"true\">Agency Commission</th>");
+                                                           print("<th class=\"col-xs-1\" data-sortable=\"true\">Book</th>");
+                                                       print("</tr>");
+                                                     print("</thead>");
+                                                     print("<form  method='post' action=\"/bookFlightDB.php\"><tbody>");
+
+                                                     while ($row = mysqli_fetch_assoc($result))
+                                                     {
+                                                          print("<tr id=". $row['BookingDetailId'] ." class=\"tr-class-2\"> ");
+                                                          foreach($row as $col){
+
+                                                            print("<td>$col</td>");
+                                                          }
+
+                                                          //print("<td><button type=\"button\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td>"); onclick=\"Book($(this).closest('tr').attr('id'))\"
+                                                          print("<td><button id=\"$(this).closest('tr').attr('id')\" type=\"submit\"  onclick=\"Book($(this).closest('tr').attr('id'))\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td></tr>");
+                                                     }
+
+                                                     print("</tbody></form>");
+                                                     print("</table>");
+
+                                                   }
+                                                   mysqli_free_result($result);
+                       }elseif($select1 == "Your Destinations" & $select2 != "All Classes" & $select3 == "Price Range")
+                                                {
+                                                  $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination, bookingdetails.BasePrice, bookingdetails.Description, bookingdetails.TripStart,
+                                                  bookingdetails.TripEnd,  classes.ClassName, bookingdetails.AgencyCommission
+                                                    FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
+                                                    WHERE classes.ClassName='".$select2."'";
+                                                    if ($result = mysqli_query($dbh, $sql))
+                                                    {
+                                                      print("<table id=\"tableId\" name=\"tableName\" data-toggle=\"table\" data-classes=\"table table-hover table-condensed\" data-striped=\"true\" data-sort-name=\"Destination\" data-sort-order=\"desc\">");
+                                                      print("<thead>");
+                                                        print("<tr>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"PackageNumber\" data-sortable=\"true\">Flight number</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"Destination\" data-sortable=\"true\">Destination</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"BasePrice\" data-sortable=\"true\">Price</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"Description\" data-sortable=\"true\">Description</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"TripStart\" >Trip Start</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"TripEnd\" data-sortable=\"true\">Trip End</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"ClassName\" data-sortable=\"true\">Class</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"AgencyCommission\" data-sortable=\"true\">Agency Commission</th>");
+                                                            print("<th class=\"col-xs-1\" data-sortable=\"true\">Book</th>");
+                                                        print("</tr>");
+                                                      print("</thead>");
+                                                      print("<form  method='post' action=\"/bookFlightDB.php\"><tbody>");
+
+                                                      while ($row = mysqli_fetch_assoc($result))
+                                                      {
+                                                           print("<tr id=". $row['BookingDetailId'] ." class=\"tr-class-2\"> ");
+                                                           foreach($row as $col){
+
+                                                             print("<td>$col</td>");
+                                                           }
+
+                                                           //print("<td><button type=\"button\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td>"); onclick=\"Book($(this).closest('tr').attr('id'))\"
+                                                           print("<td><button id=\"$(this).closest('tr').attr('id')\" type=\"submit\"  onclick=\"Book($(this).closest('tr').attr('id'))\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td></tr>");
+                                                      }
+
+                                                      print("</tbody></form>");
+                                                      print("</table>");
+
+                                                    }
+                                                    mysqli_free_result($result);
+
+                       }elseif($select1 != "Your Destinations" & $select2 == "All Classes" & $select3 == "Price Range")
+                                                {
+                                                  $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination, bookingdetails.BasePrice, bookingdetails.Description, bookingdetails.TripStart,
+                                                  bookingdetails.TripEnd,  classes.ClassName, bookingdetails.AgencyCommission
+                                                    FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
+                                                    WHERE bookingdetails.Destination = '".$select1."'";
+                                                    if ($result = mysqli_query($dbh, $sql))
+                                                    {
+                                                      print("<table id=\"tableId\" name=\"tableName\" data-toggle=\"table\" data-classes=\"table table-hover table-condensed\" data-striped=\"true\" data-sort-name=\"Destination\" data-sort-order=\"desc\">");
+                                                      print("<thead>");
+                                                        print("<tr>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"PackageNumber\" data-sortable=\"true\">Flight number</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"Destination\" data-sortable=\"true\">Destination</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"BasePrice\" data-sortable=\"true\">Price</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"Description\" data-sortable=\"true\">Description</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"TripStart\" >Trip Start</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"TripEnd\" data-sortable=\"true\">Trip End</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"ClassName\" data-sortable=\"true\">Class</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"AgencyCommission\" data-sortable=\"true\">Agency Commission</th>");
+                                                            print("<th class=\"col-xs-1\" data-sortable=\"true\">Book</th>");
+                                                        print("</tr>");
+                                                      print("</thead>");
+                                                      print("<form  method='post' action=\"/bookFlightDB.php\"><tbody>");
+
+                                                      while ($row = mysqli_fetch_assoc($result))
+                                                      {
+                                                           print("<tr id=". $row['BookingDetailId'] ." class=\"tr-class-2\"> ");
+                                                           foreach($row as $col){
+
+                                                             print("<td>$col</td>");
+                                                           }
+
+                                                           //print("<td><button type=\"button\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td>"); onclick=\"Book($(this).closest('tr').attr('id'))\"
+                                                           print("<td><button id=\"$(this).closest('tr').attr('id')\" type=\"submit\"  onclick=\"Book($(this).closest('tr').attr('id'))\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td></tr>");
+                                                      }
+
+                                                      print("</tbody></form>");
+                                                      print("</table>");
+
+                                                    }
+                                                    mysqli_free_result($result);
+
+                       }elseif($select1 == "Your Destinations" & $select2 != "All Classes" & $select3 != "Price Range")
+                                               {
+                                                 $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination, bookingdetails.BasePrice, bookingdetails.Description, bookingdetails.TripStart,
+                                                 bookingdetails.TripEnd,  classes.ClassName, bookingdetails.AgencyCommission
+                                                   FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
+                                                   WHERE (BasePrice > $str_arr[0]) and (BasePrice <$str_arr[1]) and (classes.ClassName='".$select2."')";
+                                                   if ($result = mysqli_query($dbh, $sql))
+                                                   {
+                                                     print("<table id=\"tableId\" name=\"tableName\" data-toggle=\"table\" data-classes=\"table table-hover table-condensed\" data-striped=\"true\" data-sort-name=\"Destination\" data-sort-order=\"desc\">");
+                                                     print("<thead>");
+                                                       print("<tr>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"PackageNumber\" data-sortable=\"true\">Flight number</th>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"Destination\" data-sortable=\"true\">Destination</th>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"BasePrice\" data-sortable=\"true\">Price</th>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"Description\" data-sortable=\"true\">Description</th>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"TripStart\" >Trip Start</th>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"TripEnd\" data-sortable=\"true\">Trip End</th>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"ClassName\" data-sortable=\"true\">Class</th>");
+                                                           print("<th class=\"col-xs-1\" data-field=\"AgencyCommission\" data-sortable=\"true\">Agency Commission</th>");
+                                                           print("<th class=\"col-xs-1\" data-sortable=\"true\">Book</th>");
+                                                       print("</tr>");
+                                                     print("</thead>");
+                                                     print("<form  method='post' action=\"/bookFlightDB.php\"><tbody>");
+
+                                                     while ($row = mysqli_fetch_assoc($result))
+                                                     {
+                                                          print("<tr id=". $row['BookingDetailId'] ." class=\"tr-class-2\"> ");
+                                                          foreach($row as $col){
+
+                                                            print("<td>$col</td>");
+                                                          }
+
+                                                          //print("<td><button type=\"button\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td>"); onclick=\"Book($(this).closest('tr').attr('id'))\"
+                                                          print("<td><button id=\"$(this).closest('tr').attr('id')\" type=\"submit\"  onclick=\"Book($(this).closest('tr').attr('id'))\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td></tr>");
+                                                     }
+
+                                                     print("</tbody></form>");
+                                                     print("</table>");
+                                                   }
+                                                   mysqli_free_result($result);
 
 
-                           if ($result = mysqli_query($dbh, $sql))
-                           {
-                             while ($row = mysqli_fetch_assoc($result))
-                             {
-                               print("<ul>");
-                               foreach ($row as $col)
-                               {
-                                 print("<li>$col</li>");
-                               }
-                               print("<li><a href=\"flightBooked.html\" class=\"buy_now\">Book Now</a></li>");
-                               print("</ul>");
-                             }
-                             mysqli_free_result($result);
+                       }elseif($select1 != "Your Destinations" & $select2 != "All Classes" & $select3 == "Price Range")
+                                                {
+                                                  $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination, bookingdetails.BasePrice, bookingdetails.Description, bookingdetails.TripStart,
+                                                  bookingdetails.TripEnd,  classes.ClassName, bookingdetails.AgencyCommission
+                                                    FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
+                                                    WHERE (bookingdetails.Destination = '".$select1."') and (classes.ClassName='".$select2."')";
+                                                    if ($result = mysqli_query($dbh, $sql))
+                                                    {
+                                                      print("<table id=\"tableId\" name=\"tableName\" data-toggle=\"table\" data-classes=\"table table-hover table-condensed\" data-striped=\"true\" data-sort-name=\"Destination\" data-sort-order=\"desc\">");
+                                                      print("<thead>");
+                                                        print("<tr>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"PackageNumber\" data-sortable=\"true\">Flight number</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"Destination\" data-sortable=\"true\">Destination</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"BasePrice\" data-sortable=\"true\">Price</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"Description\" data-sortable=\"true\">Description</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"TripStart\" >Trip Start</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"TripEnd\" data-sortable=\"true\">Trip End</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"ClassName\" data-sortable=\"true\">Class</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"AgencyCommission\" data-sortable=\"true\">Agency Commission</th>");
+                                                            print("<th class=\"col-xs-1\" data-sortable=\"true\">Book</th>");
+                                                        print("</tr>");
+                                                      print("</thead>");
+                                                      print("<form  method='post' action=\"/bookFlightDB.php\"><tbody>");
 
-                           }
+                                                      while ($row = mysqli_fetch_assoc($result))
+                                                      {
+                                                           print("<tr id=". $row['BookingDetailId'] ." class=\"tr-class-2\"> ");
+                                                           foreach($row as $col){
 
-                        }elseif($select1 != "Your Destinations" & $select2 != "All Classes" )
-                        {
-                            $sql = "SELECT  bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
-                            bookingdetails.TripEnd, bookingdetails.BasePrice,bookingdetails.AgencyCommission, classes.ClassName
-                            FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
-                            WHERE (bookingdetails.Destination = '".$select1."')
-                            & (classes.ClassName='".$select2."')";
+                                                             print("<td>$col</td>");
+                                                           }
+
+                                                           //print("<td><button type=\"button\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td>"); onclick=\"Book($(this).closest('tr').attr('id'))\"
+                                                           print("<td><button id=\"$(this).closest('tr').attr('id')\" type=\"submit\"  onclick=\"Book($(this).closest('tr').attr('id'))\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td></tr>");
+                                                      }
+
+                                                      print("</tbody></form>");
+                                                      print("</table>");
+
+                                                    }
+                                                    mysqli_free_result($result);
+
+                       }elseif($select1 != "Your Destinations" & $select2 == "All Classes" & $select3 != "Price Range")
+                                                {
+                                                  $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination, bookingdetails.BasePrice, bookingdetails.Description, bookingdetails.TripStart,
+                                                  bookingdetails.TripEnd,  classes.ClassName, bookingdetails.AgencyCommission
+                                                  FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
+                                                  WHERE (bookingdetails.Destination = '".$select1."') and (BasePrice > $str_arr[0]) and (BasePrice <$str_arr[1])";
+                                                  if ($result = mysqli_query($dbh, $sql))
+                                                  {
+                                                      print("<table id=\"tableId\" name=\"tableName\" data-toggle=\"table\" data-classes=\"table table-hover table-condensed\" data-striped=\"true\" data-sort-name=\"Destination\" data-sort-order=\"desc\">");
+                                                      print("<thead>");
+                                                        print("<tr>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"PackageNumber\" data-sortable=\"true\">Flight number</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"Destination\" data-sortable=\"true\">Destination</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"BasePrice\" data-sortable=\"true\">Price</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"Description\" data-sortable=\"true\">Description</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"TripStart\" >Trip Start</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"TripEnd\" data-sortable=\"true\">Trip End</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"ClassName\" data-sortable=\"true\">Class</th>");
+                                                            print("<th class=\"col-xs-1\" data-field=\"AgencyCommission\" data-sortable=\"true\">Agency Commission</th>");
+                                                            print("<th class=\"col-xs-1\" data-sortable=\"true\">Book</th>");
+                                                        print("</tr>");
+                                                      print("</thead>");
+                                                      print("<form  method='post' action=\"/bookFlightDB.php\"><tbody>");
+
+                                                      while ($row = mysqli_fetch_assoc($result))
+                                                      {
+                                                           print("<tr id=". $row['BookingDetailId'] ." class=\"tr-class-2\"> ");
+                                                           foreach($row as $col){
+
+                                                             print("<td>$col</td>");
+                                                           }
+
+                                                           //print("<td><button type=\"button\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td>"); onclick=\"Book($(this).closest('tr').attr('id'))\"
+                                                           print("<td><button id=\"$(this).closest('tr').attr('id')\" type=\"submit\"  onclick=\"Book($(this).closest('tr').attr('id'))\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td></tr>");
+                                                      }
+
+                                                      print("</tbody></form>");
+                                                      print("</table>");
+
+                                                  }
+                                                  mysqli_free_result($result);
+
+                       }elseif($select1 != "Your Destinations" & $select2 != "All Classes" & $select3 != "Price Range")
+                                               {
+                                                 $sql = "SELECT  bookingdetails.BookingDetailId, bookingdetails.Destination, bookingdetails.BasePrice, bookingdetails.Description, bookingdetails.TripStart,
+                                                 bookingdetails.TripEnd,  classes.ClassName, bookingdetails.AgencyCommission
+                                                   FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
+                                                   WHERE (bookingdetails.Destination = '".$select1."') and (classes.ClassName='".$select2."') and (BasePrice > $str_arr[0]) and (BasePrice <$str_arr[1])";
+                                                   if ($result = mysqli_query($dbh, $sql))
+                                                   {
+                                                       print("<table id=\"tableId\" name=\"tableName\" data-toggle=\"table\" data-classes=\"table table-hover table-condensed\" data-striped=\"true\" data-sort-name=\"Destination\" data-sort-order=\"desc\">");
+                                                       print("<thead>");
+                                                         print("<tr>");
+                                                             print("<th class=\"col-xs-1\" data-field=\"PackageNumber\" data-sortable=\"true\">Flight number</th>");
+                                                             print("<th class=\"col-xs-1\" data-field=\"Destination\" data-sortable=\"true\">Destination</th>");
+                                                             print("<th class=\"col-xs-1\" data-field=\"BasePrice\" data-sortable=\"true\">Price</th>");
+                                                             print("<th class=\"col-xs-1\" data-field=\"Description\" data-sortable=\"true\">Description</th>");
+                                                             print("<th class=\"col-xs-1\" data-field=\"TripStart\" >Trip Start</th>");
+                                                             print("<th class=\"col-xs-1\" data-field=\"TripEnd\" data-sortable=\"true\">Trip End</th>");
+                                                             print("<th class=\"col-xs-1\" data-field=\"ClassName\" data-sortable=\"true\">Class</th>");
+                                                             print("<th class=\"col-xs-1\" data-field=\"AgencyCommission\" data-sortable=\"true\">Agency Commission</th>");
+                                                             print("<th class=\"col-xs-1\" data-sortable=\"true\">Book</th>");
+                                                         print("</tr>");
+                                                       print("</thead>");
+                                                       print("<form  method='post' action=\"/bookFlightDB.php\"><tbody>");
+
+                                                       while ($row = mysqli_fetch_assoc($result))
+                                                       {
+                                                            print("<tr id=". $row['BookingDetailId'] ." class=\"tr-class-2\"> ");
+                                                            foreach($row as $col){
+
+                                                              print("<td>$col</td>");
+                                                            }
+
+                                                            //print("<td><button type=\"button\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td>"); onclick=\"Book($(this).closest('tr').attr('id'))\"
+                                                            print("<td><button id=\"$(this).closest('tr').attr('id')\" type=\"submit\"  onclick=\"Book($(this).closest('tr').attr('id'))\" class=\"btn btn-danger btn-rounded btn-sm my-0\">Book</button></td></tr>");
+                                                       }
+
+                                                       print("</tbody></form>");
+                                                       print("</table>");
+                                                     }
+                                                     mysqli_free_result($result);
+
+                                                   }
 
 
-                            if ($result = mysqli_query($dbh, $sql))
-                            {
-                              while ($row = mysqli_fetch_assoc($result))
-                              {
-                                print("<ul>");
-                                foreach ($row as $col)
-                                {
-                                  print("<li>$col</li>");
-                                }
-                                print("<li><a href=\"flightBooked.html\" class=\"buy_now\">Book Now</a></li>");
-                                print("</ul>");
-                              }
-                              mysqli_free_result($result);
-                            }
-
-                         }elseif($select1 != "Your Destinations" & $select3 != "Price Range")
-                         {
-                             $sql = "SELECT  bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
-                             bookingdetails.TripEnd, bookingdetails.BasePrice,bookingdetails.AgencyCommission, classes.ClassName
-                             FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId
-                             WHERE (bookingdetails.Destination = '".$select1."')
-                             & (BasePrice > $str_arr[0]) & (BasePrice <$str_arr[1]))";
-
-                             if ($result = mysqli_query($dbh, $sql))
-                             {
-
-                               while ($row = mysqli_fetch_assoc($result))
-                               {
-                                 print("<ul>");
-                                 foreach ($row as $col)
-                                 {
-                                   print("<li>$col</li>");
-                                 }
-                                 print("<li><a href=\"flightBooked.html\" class=\"buy_now\">Book Now</a></li>");
-                                 print("</ul>");
-                               }
-                               mysqli_free_result($result);
-                             }
-
-                          }else
-                          {
-                              $sql = "SELECT  bookingdetails.Destination,bookingdetails.Description, bookingdetails.TripStart,
-                              bookingdetails.TripEnd, bookingdetails.BasePrice,bookingdetails.AgencyCommission, classes.ClassName
-                              FROM bookingdetails INNER JOIN classes ON bookingdetails.ClassId = classes.ClassId";
-
-                              if ($result = mysqli_query($dbh, $sql))
-                              {
-
-                                while ($row = mysqli_fetch_assoc($result))
-                                {
-                                  print("<ul>");
-                                  foreach ($row as $col)
-                                  {
-                                    print("<li>$col</li>");
-                                  }
-                                  print("<li><a href=\"flightBooked.html\" class=\"buy_now\">Book Now</a></li>");
-                                  print("</ul>");
-                                }
-                                mysqli_free_result($result);
-                              }
-
-                           }
-
-                       mysqli_close($dbh);
-                     ?>
-
+                           mysqli_close($dbh);
+                         ?>
 
      </section>
     </div>
   </div>
-    <!-- ***** Contact Area End ***** -->
+
+  <div id="id02" class="modal">
+    <div class="roww">
+      <div class="col-755">
+        <div id="cont" class="container">
+          <form name="myForm1" action="/addBillingDetails.php">
+            <span onclick="document.getElementById('id02').style.display='none';document.getElementById('myForm').reset();document.getElementById('myForm1').reset();" class="close" title="Close Modal">&times;</span>
+            <div class="roww">
+              <div class="col-500">
+                <h3>Billing Address</h3>
+                <label for="fname"><i class="fa fa-user"></i> Full Name</label>
+                <div class="roww">
+                  <div class="col-500">
+                  <input type="text" id="fname" name="fname" placeholder="First name">
+                  </div>
+                <div class="col-500">
+                <input type="text" id="lname" name="lname" placeholder="Last name">
+                </div>
+                </div>
+                <label for="email"><i class="fa fa-envelope"></i> Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email">
+                <label for="phoneNo"><i class="fa fa-phone"></i> Phone</label>
+                <input type="text" id="phone" name="phone" placeholder="Enter your phone number">
+                <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
+                <input type="text" id="adr" name="address" placeholder="Enter your address">
+                <label for="city"><i class="fa fa-institution"></i> City</label>
+                <div class="roww">
+                  <div class="col-500">
+                  <input type="text" id="city" name="city" placeholder="City">
+                  </div>
+                <div class="col-500">
+                <input type="text" id="country" name="country" placeholder="Country">
+                </div>
+                </div>
+                <div class="roww">
+                  <div class="col-500">
+                    <label for="state">Province</label>
+                    <input type="text" id="state" name="state" placeholder="Province">
+                  </div>
+                  <div class="col-500">
+                    <label for="zip">Zip</label>
+                    <input type="text" id="zip" name="zip" placeholder="ZIP code">
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-500">
+                <h3>Payment</h3>
+                <label for="fname">Accepted Cards</label>
+                <div class="icon-container">
+                  <i class="fa fa-cc-visa" style="color:navy;"></i>
+                  <i class="fa fa-cc-amex" style="color:blue;"></i>
+                  <i class="fa fa-cc-mastercard" style="color:red;"></i>
+                  <i class="fa fa-cc-discover" style="color:orange;"></i>
+                </div>
+                <label for="cname">Name on Card</label>
+                <input type="text" id="cname" name="cardname" placeholder="Enter your name on the card">
+                <label for="ccnum">Credit card number</label>
+                <input type="text" id="ccnum" name="cardnumber" placeholder="1111-2222-3333-4444">
+                <label for="expmonth">Exp Month</label>
+                <input type="text" id="expmonth" name="expmonth" placeholder="Enter expiry month">
+                <div class="row">
+                  <div class="col-500">
+                    <label for="expyear">Exp Year</label>
+                    <input type="text" id="expyear" name="expyear" placeholder="Expiry year">
+                  </div>
+                  <div class="col-500">
+                    <label for="cvv">CVV</label>
+                    <input type="text" id="cvv" name="cvv" placeholder="CVV">
+                  </div>
+                </div>
+              </div>
+
+    </div>
+
+    <input type="submit" value="Continue to book" class="btnn">
+  </form>
+  </div>
+  </div>
+  </div>
+  </div>
+
+<script>
+function Book(id) {
+    document.getElementById('id02').style.display='block';
+    document.getElementById('myForm1').reset();
+    //alert("On you way to book flight "+id);
+    //window.location.href = "/bookFlightDB.php?id=" + id;
+    return false;
+ }
+ </script>
+
 
     <!-- ****** Footer Area Start ****** -->
     <footer class="dorne-footer-area">
@@ -255,7 +604,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <!-- All Plugins js -->
     <script src="js/others/plugins.js"></script>
 
+    <script src="js/bootstrap/bootpopup.min.js"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<!--<script src="js/google-map/map-active.js"></script>
      Active JS -->
     <script src="js/active.js"></script>

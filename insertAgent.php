@@ -1,7 +1,8 @@
 <?php
 session_start();
+include "config.php";
 
-$dbh = @mysqli_connect("localhost","AliMoussa","password","travelexperts");
+$dbh = @mysqli_connect($host,$user,$pwd,$db);
 if (! $dbh)
 {
 	die("Error: " . mysqli_connect_errno() . " - " . mysqli_connect_error());

@@ -1,57 +1,151 @@
 <?php
 	session_start();
-
-	if (isset($_REQUEST["email"]))
+  include "config.php";
+	$account = $_REQUEST["accountSelect"];
+	if (isset($_REQUEST["userName"]))
 	{
-		//connect to db
-		$sql = "SELECT password FROM agents WHERE AgtEmail=?";
-		$mysqli = new mysqli("localhost", "AliMoussa", "password", "travelexperts");
-		if (mysqli_connect_errno())
-		{
-			die("Error: " . mysqli_connect_error());
-		}
-		$stmt = $mysqli->prepare($sql);
-		$stmt->bind_param("s", $_REQUEST["email"]);
-		$stmt->execute();
-		$result = $stmt->get_result();
-		if ($row = $result->fetch_row())
-		{
-			if ($row[0] != $_REQUEST["psw"])
+		if($account == "Customer"){
+			//connect to db
+			$sql = "SELECT Password FROM customers WHERE UserName=?";
+			$mysqli = new mysqli($host,$user,$pwd,$db);
+			if (mysqli_connect_errno())
 			{
-				$_SESSION["message"] = "User Id or password is incorrect";
-				$mysqli->close();
-
-				header("Location: loginFirst.html");
-				exit;
+				die("Error: " . mysqli_connect_error());
 			}
-			else
+			$stmt = $mysqli->prepare($sql);
+			$stmt->bind_param("s", $_REQUEST["userName"]);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			if ($row = $result->fetch_row())
 			{
-				$_SESSION["loggedin"] = True;
-				if (isset($_SESSION["returnpage"]))
+				if ($row[0] != $_REQUEST["psw"])
 				{
-					$returnpage = $_SESSION["returnpage"];
+					$_SESSION["message"] = "User Id or Password is incorrect";
+					$mysqli->close();
+
+					header("Location: index.php");
+					exit;
 				}
 				else
 				{
-					$returnpage = "indexSignIn.php?email=".$_REQUEST["email"]."";
+					$_SESSION["loggedin"] = True;
+					if (isset($_SESSION["returnpage"]))
+					{
+						$returnpage = $_SESSION["returnpage"];
+					}
+					else
+					{
+							$returnpage = "indexSignInCustomer.php?userName=".$_REQUEST["userName"]."";
+					}
+					unset($_SESSION["returnpage"]);
+					$mysqli->close();
+					header("Location: $returnpage");
 				}
-				unset($_SESSION["returnpage"]);
+			}
+
+			else
+			{
+				$_SESSION["message"] = "User Id or Password is incorrect";
 				$mysqli->close();
-				header("Location: $returnpage");
+				header("Location: index.php");
+				exit;
 			}
 		}
-		else
-		{
-			$_SESSION["message"] = "User Id or password is incorrect";
-			$mysqli->close();
-			header("Location: loginFirst.html");
-			exit;
+		elseif ($account == "Agent") {
+			//connect to db
+			$sql = "SELECT Password FROM agents WHERE UserName=?";
+			$mysqli = new mysqli($host,$user,$pwd,$db);
+			if (mysqli_connect_errno())
+			{
+				die("Error: " . mysqli_connect_error());
+			}
+			$stmt = $mysqli->prepare($sql);
+			$stmt->bind_param("s", $_REQUEST["userName"]);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			if ($row = $result->fetch_row())
+			{
+				if ($row[0] != $_REQUEST["psw"])
+				{
+					$_SESSION["message"] = "User Id or Password is incorrect";
+					$mysqli->close();
+
+					header("Location: index.php");
+					exit;
+				}
+				else
+				{
+					$_SESSION["loggedin"] = True;
+					if (isset($_SESSION["returnpage"]))
+					{
+						$returnpage = $_SESSION["returnpage"];
+					}
+					else
+					{
+						$returnpage = "indexSignInAgent.php?userName=".$_REQUEST["userName"]."";
+					}
+					unset($_SESSION["returnpage"]);
+					$mysqli->close();
+					header("Location: $returnpage");
+				}
+			}
+			else
+			{
+				$_SESSION["message"] = "User Id or Password is incorrect";
+				$mysqli->close();
+				header("Location: index.php");
+				exit;
+			}
+		}
+
+
+		elseif ($account == "Supplier") {
+			//connect to db
+			$sql = "SELECT Password, SupplierId FROM suppliers WHERE UserName=?";
+			//print($sql);
+			$mysqli = new mysqli($host,$user,$pwd,$db);
+			if (mysqli_connect_errno())
+			{
+				die("Error: " . mysqli_connect_error());
+			}
+			$stmt = $mysqli->prepare($sql);
+			$stmt->bind_param("s", $_REQUEST["userName"]);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			if ($row = $result->fetch_row())
+			{
+				if ($row[0] != $_REQUEST["psw"])
+				{
+					$_SESSION["message"] = "User Id or Password is incorrect";
+					$mysqli->close();
+
+					header("Location: index.php");
+					exit;
+				}
+				else
+				{
+					$_SESSION["loggedin"] = True;
+					if (isset($_SESSION["returnpage"]))
+					{
+						$returnpage = $_SESSION["returnpage"];
+					}
+					else
+					{
+						$returnpage = "indexSignInSupplier.php?userName=".$_REQUEST["userName"]."&supId=$row[1]";
+					}
+					unset($_SESSION["returnpage"]);
+					$mysqli->close();
+					header("Location: $returnpage");
+				}
+			}
+			else
+			{
+				$_SESSION["message"] = "User Id or Password is incorrect";
+				$mysqli->close();
+				header("Location: index.php");
+				exit;
+			}
 		}
 	}
-	else
-	{
-		$_SESSION["message"] = "You must log in first.";
-		header("Location: loginFirst.html");
-		exit;
-	}
+
 ?>
